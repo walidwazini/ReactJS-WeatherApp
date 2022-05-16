@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
-import Header from './components/Header';
-import Main from './components/Main'
+import Header from './layout/Header';
+import Main from './layout/Main'
 
 const App = () => {
   return (
@@ -11,5 +11,7 @@ const App = () => {
     </div>
   );
 }
+
+
 
 export default App;
