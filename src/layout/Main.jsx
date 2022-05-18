@@ -1,19 +1,24 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
+
 import SearchBar from "../components/SearchBar";
+import fetchWeather from "../api/fetchWeather";
 
 const Main = () => {
-  const searchRef = useRef();
   const [search, setSearch] = useState("");
-  const [cityName, setCityName] = useState("City Name");
+  // const [cityName, setCityName] = useState("City Name");
+  const [searchCity, setSearchCity] = useState({});
 
   const changeHandler = (ev) => setSearch(ev.target.value);
 
-  const submitHandler = (ev) => {
+  const submitHandler = async (ev) => {
     ev.preventDefault();
-    const searchCity = search;
-    console.log(searchCity);
-    setCityName(searchCity);
+
+    const data = await fetchWeather(search);
+    setSearchCity(data);
+    console.log(data.weather);
     setSearch("");
+
+    return data;
   };
 
   return (
@@ -36,7 +41,21 @@ const Main = () => {
               className='h-4/5 flex flex-col justify-center items-center bg-yellow-50 mt-5 px-4 py-[8%] shadow-md '
             >
               <div id='city-name'>
-                <h2 className='text-[30px] text-red-500'>{cityName}</h2>
+                {searchCity.main && (
+                  <div>
+                    <h2 className='text-[30px] text-red-500'>
+                      {searchCity.name}
+                    </h2>
+                    <h3>{searchCity.main.temp}</h3>
+                    <h3>{searchCity.sys.country}</h3>
+                    <div>
+                      <img
+                        src={`https://openweathermap.org/img/wn/${searchCity.weather[0].icon}@2x.png`}
+                      />
+                      <p>{searchCity.weather[0].description}</p>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
